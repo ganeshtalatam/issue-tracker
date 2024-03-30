@@ -76,7 +76,7 @@ const NewIssuePage = ({ issues }: { issues?: Issue | null }) => {
             {errors.description.message}
           </Text>
         )}
-        <Button style={{ cursor: "pointer" }}>
+        <Button disabled={isSubmitting} style={{ cursor: "pointer" }}>
           {issues ? "Update Issue" : "Submit New Issue"}{" "}
           {isSubmitting && <Spinner />}
         </Button>

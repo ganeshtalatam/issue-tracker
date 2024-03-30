@@ -1,4 +1,4 @@
-import { Button, Link as NextLink, Table } from "@radix-ui/themes";
+import { Button, Link as NextLink, Table, Text } from "@radix-ui/themes";
 import prisma from "@/prisma/client";
 // import Link from "next/link";
 import React from "react";
@@ -59,48 +59,56 @@ const IssuePage = async ({ searchParams }: Props) => {
   return (
     <div>
       <IssueButton />
-      <Table.Root variant="surface" mb="3">
-        <Table.Header>
-          <Table.Row>
-            {columsn.map((column) => {
-              return (
-                <Table.ColumnHeaderCell
-                  key={column.value}
-                  className={column.className}
-                >
-                  <Link
-                    href={{ query: { ...searchParams, orderBy: column.value } }}
+      {issueCount === 0 ? (
+        <Text>At present there are no issues</Text>
+      ) : (
+        <Table.Root variant="surface" mb="3">
+          <Table.Header>
+            <Table.Row>
+              {columsn.map((column) => {
+                return (
+                  <Table.ColumnHeaderCell
+                    key={column.value}
+                    className={column.className}
                   >
-                    {column.label}
-                  </Link>
-                  {column.value === searchParams.orderBy ? (
-                    <ArrowUpIcon className="inline mb-1" />
-                  ) : null}
-                </Table.ColumnHeaderCell>
-              );
-            })}
-          </Table.Row>
-        </Table.Header>
-
-        <Table.Body>
-          {issue.map((issue) => (
-            <Table.Row key={issue.id}>
-              <Table.RowHeaderCell>
-                <NextLink href={`/issues/${issue.id}`}>{issue.title}</NextLink>
-                <div className="table-cell sm:hidden">
-                  <IssueStatusBadge status={issue.status} />
-                </div>
-              </Table.RowHeaderCell>
-              <Table.Cell className="hidden sm:table-cell">
-                <IssueStatusBadge status={issue.status} />
-              </Table.Cell>
-              <Table.Cell className="hidden sm:table-cell">
-                {issue.updatedAt.toDateString()}
-              </Table.Cell>
+                    <Link
+                      href={{
+                        query: { ...searchParams, orderBy: column.value },
+                      }}
+                    >
+                      {column.label}
+                    </Link>
+                    {column.value === searchParams.orderBy ? (
+                      <ArrowUpIcon className="inline mb-1" />
+                    ) : null}
+                  </Table.ColumnHeaderCell>
+                );
+              })}
             </Table.Row>
-          ))}
-        </Table.Body>
-      </Table.Root>
+          </Table.Header>
+
+          <Table.Body>
+            {issue.map((issue) => (
+              <Table.Row key={issue.id}>
+                <Table.RowHeaderCell>
+                  <NextLink href={`/issues/${issue.id}`}>
+                    {issue.title}
+                  </NextLink>
+                  <div className="table-cell sm:hidden">
+                    <IssueStatusBadge status={issue.status} />
+                  </div>
+                </Table.RowHeaderCell>
+                <Table.Cell className="hidden sm:table-cell">
+                  <IssueStatusBadge status={issue.status} />
+                </Table.Cell>
+                <Table.Cell className="hidden sm:table-cell">
+                  {issue.updatedAt.toDateString()}
+                </Table.Cell>
+              </Table.Row>
+            ))}
+          </Table.Body>
+        </Table.Root>
+      )}
       <Pagination
         itemsCount={issueCount}
         pageCount={pageSize}
