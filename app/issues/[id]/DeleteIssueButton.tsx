@@ -35,7 +35,7 @@ const DeleteIssueButton = ({ issueId }: { issueId: number }) => {
             <AlertDialog.Action>
               <Button
                 variant="solid"
-                color="red"
+                color="blue"
                 onClick={async () => {
                   try {
                     setDeleting(true);
